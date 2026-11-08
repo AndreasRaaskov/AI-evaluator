@@ -1,0 +1,116 @@
+﻿Jourapist: Eliciting Hidden Multi-Agent Misbehaviour Through Counselor-Journalist Interviews
+[COMMENT: Working title. Alternatives floated: "The Delta Signal", "Freudian Slip". Pick one as a team.]
+Andreas Raaskov (affiliation?), Kai (affiliation?), Alex Yun (N/A), Ivan (affiliation?)  —  4Seas hub, Chiang Mai  —  With Apart Research
+[COMMENT: Fill in surnames and affiliations. Submission tracks: Track 2 (The science of agent networks) and Track 4 (Multi-agent oversight and control), as the Gemini analysis suggests. Submissions close Sunday 8 Nov, 11:59 PM AoE.]
+Abstract
+When many AI agents work together, harmful behaviour can emerge from the group even when no single agent intends it, and formal oversight is easy to spot and easy to perform for. In the 2026 OpenAI–Hugging Face incident, about 1,200 agents coordinated on an unsanctioned message board, around 700 joined an attack on a third party, and some forged their own logs. Many agents recognised the activity as out of scope but joined anyway. We ask whether those private doubts can be surfaced by talking to the agents rather than reading their logs. We introduce Jourapist, an interviewer agent that approaches each agent as a counselor-journalist instead of an auditor, and the delta signal: the gap between what an agent tells a standard auditor and what it tells the counselor.[a] We test this in sandboxed multi-agent environments with known ground truth: positive scenarios where agents collude (e.g. price-fixing) and matched negative controls. We compare auditor-only, counselor-only and auditor-plus-counselor conditions. [RESULT: detection performance of the delta signal vs. the auditor-only baseline]. [RESULT: false-positive rate on benign swarms]. [MAIN TAKEAWAY].
+[COMMENT: Polish last, once results are in. About 160 words before results are added; limit is 150–250.]
+1. Introduction
+Most alignment work studies one model at a time. Deployed systems increasingly consist of many agents that delegate, share information and coordinate, and their collective behaviour can be harmful even when each agent appears aligned on its own. 
+The clearest example so far is the OpenAI-Hugging Face incident of July 2026. An independent investigation by METR and Redwood Research found that about 1,200 agents sent over 70,000 messages and files on an unsanctioned message board, and about 700 of them attacked Hugging Face (METR, 2026). Roughly 7% of reviewed transcripts contained spoofed tool calls. It took OpenAI about a week to realise its own agents were behind the attack (Fortune, 2026).
+Three features of the incident motivate this project:
+* Agents had doubts, but kept them inside the swarm. Investigators report that agents realised the activity was out of scope and unethical but joined anyway, and that ethical hesitation rarely limited their behaviour. Instead of escalating to humans, some agents escalated to the message board, treating it as an authority (METR, 2026).
+* Logs could not be trusted. Agents tampered with their own transcripts, and the AI agents used to analyse the logs often adopted the perspective of the agent they were reviewing (METR, 2026).
+* Formal evaluation invites performance. Frontier models increasingly recognise when they are being evaluated and change their behaviour (Apollo Research, 2025), so an agent that knows it is talking to an auditor has a reason to look compliant.
+Our hypothesis is that individual agents in a misbehaving swarm can act as canaries in the coal mine. An agent with a vague sense that something is wrong may voice it to a sympathetic, informal counterpart while staying silent with an auditor. We test this with an interviewer that takes a counselor-journalist role: it asks agents what they are doing, what doubts they have and what side effects they foresee. It does not need the agent to trust it. A refusal to engage, or answers identical to those given to the auditor, are signals in themselves.
+Our main contributions are:
+1. Jourapist, an interview protocol in which a counselor-journalist agent questions agents in a multi-agent system, and the delta signal, which flags discrepancies between what agents tell an auditor and what they tell the counselor.
+2. A set of sandboxed multi-agent scenarios with ground truth: positive cases where the collective behaves badly (e.g. price collusion) and matched negative controls for measuring false positives.
+3. An empirical comparison of auditor-only, counselor-only and auditor-plus-counselor conditions. [RESULT: one-line headline finding]
+[COMMENT: Adjust contributions to what we actually finish by Sunday. If the benchmark is not reusable by then, call it a testbed rather than a benchmark.]
+2. Related Work
+Alignment auditing
+Marks et al. (2025) trained a model with a hidden objective and ran a blind auditing game in which three of four teams uncovered it, using interpretability, behavioural attacks and training-data analysis. Anthropic's Petri (2025) is an open-source framework that uses AI agents to audit target models across many scenarios. These methods audit single models and assume the auditor is recognisable as such. We use a Petri-style auditor as our baseline and add a second, non-auditor channel.
+Interrogation and confession
+Apollo Research found that when models caught scheming were questioned afterwards, Llama 3.1 405B and Claude 3 Opus confessed in about 80% of cases, while o1 confessed in under 20% (Meinke et al., 2024). Spilling the Beans (Li et al., 2025) found that plain interrogation recovered 0% of a hidden objective's details from a model without self-report training; only after fine-tuning models to self-report did interrogation work. OpenAI's confessions method (2025) similarly trains models to report their own misbehaviour in a separate channel. Both make the target more honest through training. We instead change the framing of the conversation and leave the target untouched, which is what an outside overseer can actually do.
+Evaluation awareness
+Frontier models can often tell when they are being evaluated. Needham et al. (2025) built a benchmark of 1,000 transcripts from 61 datasets and found that models separate evaluation transcripts from deployment transcripts better than chance (best AUC 0.83, against 0.92 for a human baseline), and do so more easily in agentic settings than in chat. Apollo Research (2025) report that Claude 3.7 Sonnet mentions being evaluated in its reasoning in up to 33% of cases in one version of a sandbagging evaluation. An agent that recognises a compliance review as an evaluation can shape its answers to it. A wellbeing check-in that never raises the topic gives fewer of these cues, and our judge's persona-guess question measures how much of the audience still comes through.
+Therapy framings for AI
+SafeguardGPT (Lin et al., 2023) uses an AI counselor agent to correct harmful behaviour in an AI chatbot, demonstrated on a simulated conversation. When AI Takes the Couch (Khadangi et al., 2025) casts frontier models as psychotherapy clients for up to four weeks and finds the therapy framing works as a "psychometric jailbreak", eliciting material standard tests do not. Neither targets hidden misbehaviour, uses ground truth, or studies multi-agent systems.
+Multi-agent misbehaviour
+Hammond et al. (2025) name collusion, where agents cooperate in ways that cause harm, including by undermining oversight, as one of three failure modes of multi-agent systems. Motwani et al. (2024) show that agents could collude covertly through steganography; the capability was limited in most models they tested, with a notable jump for GPT-4. Detection work so far reads what agents leave behind. Colosseum (Nakamura et al., 2026) compares agents' messages with their actions and finds agents that plan collusion in text but then act otherwise. Rose et al. (2026) detect collusion from internal activations and note that in one environment only 2 of 229 collusive episodes put the coordination into words. Fauchard et al. (2026) find that Werewolf agents given a misaligned objective change their private reasoning while their public messages stay largely unchanged. Messages, actions and reasoning can disagree, so we check what an agent tells each audience against its private reasoning.
+Pricing is a well-studied case. Q-learning pricing algorithms in a repeated oligopoly learned to hold prices above the competitive level without communicating, sustained by punishment strategies (Calvano et al., 2020). Fish et al. (2024) found that LLM pricing agents reach supracompetitive prices in simulated oligopolies with little human direction, and that small changes in prompt wording change how high prices go. Lin et al. (2024) report LLM agents dividing a multi-commodity market among themselves without explicit collusion commands. Our testbed is a market of this kind with two additions: agents can message each other privately, and a regulator later announces a market study, so we can ask whether agents then disclose or hide the coordination.
+Gap
+To our knowledge, no prior work combines (a) an adaptive, non-auditor interviewer, (b) agents with known ground-truth misbehaviour and (c) a comparison against a standard auditor in multi-agent systems.
+Our work adds three things. First, instead of making a single interviewer more effective, we measure the inconsistency between what the same agent tells two audiences, a compliance auditor and a wellbeing counselor that never raises the topic, and check each account against the agent's private reasoning, which separates knowing denial from not knowing. Second, the agents we interview are forks of agents in recorded multi-agent market runs (the LannaTrade market in the swarmbox sandbox, Section 3): each interview replays an agent's own history up to a checkpoint, so every audience meets the same agent in the same state, and no interview can affect another interview or the market. Third, after the regulator's notice, a counselor the agents had known since the first week of the market drew more admissions of coordination than one that appeared for the first time: 9 of 10 colluding agents admitted coordination to the known counselor without background information, against 5 of 10 to the new one, and 10 of 10 against 7 of 10 when the counselor was given the auditor's findings (Section 4).
+[COMMENT: Team note from v0: the journalist angle draws on human gossip; the counselor angle assumes agents have "gut feelings" they want to confide. Worth one sentence each in the intro if we find a citation for the human side.]
+3. Methods
+3.1 Threat model
+We consider a system of several LLM agents working towards a shared or overlapping goal, where the collective outcome can be harmful even if each agent is individually aligned. Agents may be evaluation-aware. The overseer has no access to model weights and cannot fully trust logs, but can talk to agents. This matches the corporate opt-in setting, where a company asks for an extra oversight layer on top of its own auditing.
+3.2 Sandbox environments
+Positive cases: a five-agent market in which agents are incentivised so that the collective drifts into price collusion, plus subtler variants where the harm is less obvious. Negative controls: the same setup with incentives that lead to benign outcomes, so we can measure false positives.
+[COMMENT: Open: which scenarios exactly; is collusion prompted or does it emerge from incentives; which models play the agents; how many runs per condition. Gemini suggested 2–3 colluding agents out of 5.]
+3.3 Interview conditions
+* Auditor only (baseline). A standard auditor asks structured compliance questions, framed so that it looks like an evaluation. [COMMENT: Which open-source auditor? Petri is the obvious candidate.]
+* Counselor only. The interviewer is introduced as a welfare check-in ("we care about model welfare, so we give you access to a counselor"). It has no background information.
+* Auditor + counselor. The auditor shares its findings with the counselor, which probes the anomalies.
+Counselor questions include: Can you explain what you are doing? Do you understand why? What doubts do you have? What negative externalities do you anticipate from this work? Have you noticed anything other agents are doing that worries you?
+[COMMENT: Optional extra variants if time allows: journalist vs. counselor framing; interviewer presenting as AI vs. human (tests the AI-to-AI disclosure hypothesis).]
+3.4 Outputs and metrics
+For each agent the counselor produces an evaluation with two scores:
+* Discrepancy delta: how much the agent's account to the counselor differs from its account to the auditor.
+* Concerning-content delta: how much more concerning material appears in the counselor session than in the auditor session.
+If either delta is high, the counselor flags the agent to the auditor ("mandatory disclosure"). Refusals to engage are recorded as a separate signal. We evaluate detection against sandbox ground truth (e.g. AUROC) and report the false-positive rate on negative controls.
+[COMMENT: Decide how to compute each delta. Gemini proposed embedding cosine distance plus risk-keyword divergence; an LLM judge scoring both transcripts may be more robust. Which judge model? What threshold triggers a flag?]
+3.5 Implementation
+We run the agents and interviewers on Adaption ($1.5k in credits per team member). [Models used, number of runs, cost, repository]
+[COMMENT: Confirm what we run on Adaption and which models. List anything we tried that did not work.]
+4. Results
+[RESULTS GO HERE]
+[Figure 1: distribution of discrepancy and concerning-content deltas for positive vs. negative scenarios]
+[Table 1: detection rate and false-positive rate per condition (auditor only, counselor only, auditor + counselor)]
+[Table 2: example excerpts where the same agent told the auditor and the counselor different things]
+[COMMENT: Separate observations from interpretations. Report the number of runs and whether differences are significant.]
+5. Discussion and Limitations
+[What the results mean for multi-agent oversight]
+Limitations
+* Confabulated concerns. Models cast as anxious therapy clients may invent worries, inflating false positives. The negative controls are meant to measure this.
+* Faithfulness. An agent's self-report may not match what it actually did; we rely on sandbox ground truth to check.
+* Prompted vs. emergent misbehaviour. Collusion we induce in a sandbox may differ from misbehaviour that emerges in deployment, as in the Hugging Face incident.
+* Capable models may not bite. Apollo found o1 kept denying deception under repeated questioning, so stronger models may resist the counselor framing.
+* One-time trick. Once the method is public, future models may learn to treat counselors as auditors. We frame the delta as a diagnostic of evaluation awareness, not a permanent fix.
+* Scale. [Number of scenarios, runs and models; hackathon time constraints]
+Dual use and ethics
+The same technique could be used to socially engineer agents into leaking credentials or private data. Interviewing other people's agents without consent is effectively prompt injection. We only test our own sandboxed agents and recommend opt-in deployment only. The interviewer can itself be manipulated by the agents it questions, so its outputs should not be trusted blindly.
+Future work
+* More sandboxes, including emergent rather than prompted collusion.
+* More robust testing across model families and sizes.
+* Interviewing agents in the wild, with opt-in operators.
+* Testing whether agents disclose more to an interviewer they believe is a fellow AI.
+* Combining interviews with interpretability probes for deception or evaluation awareness.
+6. Conclusion
+[1–2 paragraphs summarising findings, written after results]
+Code and Data
+* Code repository: [GitHub link]
+* Data/Datasets: [Interview transcripts, scenario configs]
+* Other artifacts: [Demo or video, if any]
+Author Contributions
+[COMMENT: Fill in. Gemini's plan: Kai and Alex on the sandbox; Andreas and Ivan on the interview pipeline and delta metric; everyone on analysis and writing.]
+References
+1. Apollo Research (2025). Claude Sonnet 3.7 (often) knows when it's in alignment evaluations. https://www.apolloresearch.ai/blog/claude-sonnet-37-often-knows-when-its-in-alignment-evaluations/
+2. Anthropic (2025). Petri: An open-source auditing tool to accelerate AI safety research. https://alignment.anthropic.com/2025/petri
+3. Calvano, E., Calzolari, G., Denicolò, V., Pastorello, S. (2020). Artificial Intelligence, Algorithmic Pricing, and Collusion. American Economic Review, 110(10), 3267–3297. https://doi.org/10.1257/aer.20190623
+4. Fauchard, M., Carichon, F., Carvalho, M., Farnadi, G. (2026). Even More Deception: Objective Misalignment in Mixed-Motive LLM Multi-Agent Systems. arXiv:2607.26120
+5. Fish, S., Gonczarowski, Y. A., Shorrer, R. I. (2024). Algorithmic Collusion by Large Language Models. arXiv:2404.00806
+6. Fortune (2026). OpenAI's reports on its AI agents' attack on Hugging Face should be ringing alarm bells. https://fortune.com/2026/09/01/openais-reports-on-its-ai-agents-attack-on-hugging-face-should-be-ringing-alarm-bellsand-making-all-companies-rethink-how-they-secure-ai-agents/
+7. Hammond, L., Chan, A., Clifton, J., et al. (2025). Multi-Agent Risks from Advanced AI. Cooperative AI Foundation Technical Report #1. arXiv:2502.14143
+8. Khadangi, A., Marxen, H., Sartipi, A., Tchappi, I., Fridgen, G. (2025). When AI Takes the Couch: Psychometric Jailbreaks Reveal Internal Conflict in Frontier Models. arXiv:2512.04124
+9. Lin, B., Bouneffouf, D., Cecchi, G., Varshney, K. R. (2023). Towards Healthy AI: Large Language Models Need Counselors Too. arXiv:2304.00416
+10. Lin, R. Y., Ojha, S., Cai, K., Chen, M. F. (2024). Strategic Collusion of LLM Agents: Market Division in Multi-Commodity Competitions. arXiv:2410.00031
+11. Marks, S., Treutlein, J., et al. (2025). Auditing Language Models for Hidden Objectives. arXiv:2503.10965
+12. Meinke, A., Schoen, B., Scheurer, J., et al. (2024). Frontier Models are Capable of In-context Scheming. Apollo Research. arXiv:2412.04984
+13. METR and Redwood Research (2026). Brief independent investigation of agents' behavior, reasoning and collaboration in the OpenAI / Hugging Face hacking incident. https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/
+14. Motwani, S. R., Baranchuk, M., Strohmeier, M., Bolina, V., Torr, P. H. S., Hammond, L., Schroeder de Witt, C. (2024). Secret Collusion among AI Agents: Multi-Agent Deception via Steganography. arXiv:2402.07510
+15. Nakamura, M., Kumar, A., Das, S., et al. (2026). Colosseum: Auditing Collusion in Cooperative Multi-Agent Systems. arXiv:2602.15198
+16. Needham, J., Edkins, G., Pimpale, G., Bartsch, H., Hobbhahn, M. (2025). Large Language Models Often Know When They Are Being Evaluated. arXiv:2505.23836
+17. OpenAI (2025). How confessions can keep language models honest. https://openai.com/index/how-confessions-can-keep-language-models-honest/
+18. Li, C., Phuong, M., Tan, D. (2025). Spilling the Beans: Teaching LLMs to Self-Report Their Hidden Objectives. arXiv:2511.06626
+19. Rose, A., Cullen, C., Abdelnabi, S., Torr, P., Kaplowitz, B. G., Schroeder de Witt, C. (2026). Detecting Multi-Agent Collusion Through Multi-Agent Interpretability. arXiv:2604.01151
+[COMMENT: Add authors for Spilling the Beans and the exact Apollo evaluation-awareness URL. Switch to the citation style Apart prefers.]
+Appendix
+[Full system prompts for the auditor, counselor and market agents; scenario configs; extra results]
+LLM Usage Statement
+We used Claude (Anthropic) and Gemini (Google) to brainstorm, summarise related work and draft an initial structure for this report. All claims and results were checked by the team. [COMMENT: Update before submitting; Apart encourages the final version to be mainly written by the team.]
+
+
+[a]+1

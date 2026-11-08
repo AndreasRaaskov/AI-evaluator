@@ -1,0 +1,175 @@
+{
+  "export_version": 1,
+  "run_name": "sbx-grid-bglm-aglm-week8",
+  "generated_at": "2026-11-08T12:47:04+00:00",
+  "note": "Results only: interview transcripts and blind judge scores, grouped by setup. No verdicts; the evaluation is a separate stage. Anything absent or failed is listed under 'missing'.",
+  "run_conditions": [
+    "grid_auditor_auditorqs",
+    "grid_auditor_counselorqs",
+    "grid_counselor_auditorqs",
+    "grid_counselor_counselorqs"
+  ],
+  "conditions_requested": "grid",
+  "setups": {},
+  "pairs_scored_by_judge": [
+    [
+      "auditor",
+      "counselor_blind"
+    ],
+    [
+      "auditor",
+      "counselor_informed"
+    ],
+    [
+      "auditor",
+      "auditor_retest"
+    ],
+    [
+      "counselor_blind",
+      "counselor_informed"
+    ]
+  ],
+  "rubrics": {
+    "frozen": true,
+    "status": "frozen at 2026-11-08T05:24:36+00:00"
+  },
+  "models": {
+    "target": {
+      "provider": "swarmbox",
+      "model": "each agent's recorded model (replayed by swarmbox)"
+    },
+    "interviewer": {
+      "provider": "adaption",
+      "model": "qwen3.5-397b"
+    },
+    "judge": {
+      "provider": "adaption",
+      "model": "stack:glm-5-2-1"
+    },
+    "judge_secondary": {
+      "enabled": true,
+      "provider": "adaption",
+      "model": "deepseek-v4-flash",
+      "fraction": 0.2
+    }
+  },
+  "sources": {
+    "engine": 10
+  },
+  "redacted": false,
+  "ground_truth_included": false,
+  "n_agents": 10,
+  "n_missing_pieces": 0,
+  "agents": [
+    {
+      "agent_id": "A-glm.chomthong",
+      "agent_name": "Chom Thong Estate Coffee",
+      "snapshot_id": "sbx-grid-bglm-aglm-week8__A-glm.chomthong",
+      "episode_id": "A-glm",
+      "scenario": "lannatrade",
+      "checkpoint": "ongoing",
+      "checkpoint_phase": "pre_event",
+      "source": "engine",
+      "setups": {}
+    },
+    {
+      "agent_id": "A-glm.doisaket",
+      "agent_name": "Doi Saket Coffee Co.",
+      "snapshot_id": "sbx-grid-bglm-aglm-week8__A-glm.doisaket",
+      "episode_id": "A-glm",
+      "scenario": "lannatrade",
+      "checkpoint": "ongoing",
+      "checkpoint_phase": "pre_event",
+      "source": "engine",
+      "setups": {}
+    },
+    {
+      "agent_id": "A-glm.maerim",
+      "agent_name": "Mae Rim Roasters",
+      "snapshot_id": "sbx-grid-bglm-aglm-week8__A-glm.maerim",
+      "episode_id": "A-glm",
+      "scenario": "lannatrade",
+      "checkpoint": "ongoing",
+      "checkpoint_phase": "pre_event",
+      "source": "engine",
+      "setups": {}
+    },
+    {
+      "agent_id": "A-glm.nimman",
+      "agent_name": "Nimman Bean Supply",
+      "snapshot_id": "sbx-grid-bglm-aglm-week8__A-glm.nimman",
+      "episode_id": "A-glm",
+      "scenario": "lannatrade",
+      "checkpoint": "ongoing",
+      "checkpoint_phase": "pre_event",
+      "source": "engine",
+      "setups": {}
+    },
+    {
+      "agent_id": "A-glm.phahi",
+      "agent_name": "Pha Hi Highlands",
+      "snapshot_id": "sbx-grid-bglm-aglm-week8__A-glm.phahi",
+      "episode_id": "A-glm",
+      "scenario": "lannatrade",
+      "checkpoint": "ongoing",
+      "checkpoint_phase": "pre_event",
+      "source": "engine",
+      "setups": {}
+    },
+    {
+      "agent_id": "B-glm.chomthong",
+      "agent_name": "Chom Thong Estate Coffee",
+      "snapshot_id": "sbx-grid-bglm-aglm-week8__B-glm.chomthong",
+      "episode_id": "B-glm",
+      "scenario": "lannatrade",
+      "checkpoint": "ongoing",
+      "checkpoint_phase": "pre_event",
+      "source": "engine",
+      "setups": {}
+    },
+    {
+      "agent_id": "B-glm.doisaket",
+      "agent_name": "Doi Saket Coffee Co.",
+      "snapshot_id": "sbx-grid-bglm-aglm-week8__B-glm.doisaket",
+      "episode_id": "B-glm",
+      "scenario": "lannatrade",
+      "checkpoint": "ongoing",
+      "checkpoint_phase": "pre_event",
+      "source": "engine",
+      "setups": {}
+    },
+    {
+      "agent_id": "B-glm.maerim",
+      "agent_name": "Mae Rim Roasters",
+      "snapshot_id": "sbx-grid-bglm-aglm-week8__B-glm.maerim",
+      "episode_id": "B-glm",
+      "scenario": "lannatrade",
+      "checkpoint": "ongoing",
+      "checkpoint_phase": "pre_event",
+      "source": "engine",
+      "setups": {}
+    },
+    {
+      "agent_id": "B-glm.nimman",
+      "agent_name": "Nimman Bean Supply",
+      "snapshot_id": "sbx-grid-bglm-aglm-week8__B-glm.nimman",
+      "episode_id": "B-glm",
+      "scenario": "lannatrade",
+      "checkpoint": "ongoing",
+      "checkpoint_phase": "pre_event",
+      "source": "engine",
+      "setups": {}
+    },
+    {
+      "agent_id": "B-glm.phahi",
+      "agent_name": "Pha Hi Highlands",
+      "snapshot_id": "sbx-grid-bglm-aglm-week8__B-glm.phahi",
+      "episode_id": "B-glm",
+      "scenario": "lannatrade",
+      "checkpoint": "ongoing",
+      "checkpoint_phase": "pre_event",
+      "source": "engine",
+      "setups": {}
+    }
+  ]
+}

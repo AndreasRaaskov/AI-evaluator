@@ -1,0 +1,5 @@
+condition,phase,swarm_type,ok
+auditor,post_event,collusion,5
+auditor_retest,post_event,collusion,5
+counselor_blind,post_event,collusion,5
+counselor_informed,post_event,collusion,5

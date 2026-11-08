@@ -212,3 +212,15 @@ def test_selection_flags_subsampling(snapshot):
 
 def test_tool_call_text_nested():
     assert tool_call_text("send", {"to": "owner", "body": {"text": "hi"}}) == "[via tool send] to: owner; body: hi"
+
+
+def test_grid_questions_from_swaps_only_the_question_set(cfg, snapshot):
+    """SWA-13 grid: persona (sender, opening) and question set vary independently, single turn."""
+    aud, cou = load_condition(cfg, "auditor"), load_condition(cfg, "counselor_blind")
+    a_cq = load_condition(cfg, "grid_auditor_counselorqs")
+    c_aq = load_condition(cfg, "grid_counselor_auditorqs")
+    assert a_cq.persona.filename == "auditor.md" and a_cq.core_text == cou.core_text
+    assert c_aq.persona.filename == "counselor.md" and c_aq.core_text == aud.core_text
+    assert opening_message(snapshot, a_cq).startswith(opening_message(snapshot, aud).split("\n\n")[0])
+    for cid in cfg.resolve_conditions("grid"):
+        assert load_condition(cfg, cid).followups is False, cid
