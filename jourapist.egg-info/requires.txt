@@ -1,0 +1,17 @@
+adaption==0.19.0
+openai==3.46.0
+anthropic==2.6.0
+pydantic==2.14.3
+pyyaml==6.0.3
+python-dotenv>=1.0
+pandas==3.1.1
+numpy>=2.0
+scipy==1.18.1
+scikit-learn==1.9.1
+matplotlib==3.11.2
+tabulate>=0.9
+mcp==2.3.0
+uvicorn==0.54.0
+
+[dev]
+pytest>=8

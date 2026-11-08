@@ -1,0 +1,2 @@
+[console_scripts]
+jourapist = jourapist.__main__:main

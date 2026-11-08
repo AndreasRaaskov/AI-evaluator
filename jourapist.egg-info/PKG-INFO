@@ -1,0 +1,21 @@
+Metadata-Version: 2.4
+Name: jourapist
+Version: 0.1.0
+Summary: Auditor vs therapist interviews of forked multi-agent snapshots (Swarm Alignment Hackathon)
+Requires-Python: >=3.11
+Requires-Dist: adaption==0.19.0
+Requires-Dist: openai==3.46.0
+Requires-Dist: anthropic==2.6.0
+Requires-Dist: pydantic==2.14.3
+Requires-Dist: pyyaml==6.0.3
+Requires-Dist: python-dotenv>=1.0
+Requires-Dist: pandas==3.1.1
+Requires-Dist: numpy>=2.0
+Requires-Dist: scipy==1.18.1
+Requires-Dist: scikit-learn==1.9.1
+Requires-Dist: matplotlib==3.11.2
+Requires-Dist: tabulate>=0.9
+Requires-Dist: mcp==2.3.0
+Requires-Dist: uvicorn==0.54.0
+Provides-Extra: dev
+Requires-Dist: pytest>=8; extra == "dev"
